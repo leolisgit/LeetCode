@@ -1,0 +1,71 @@
+/**
+ * Definition for binary tree
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; left = null; right = null; }
+ * }
+ */
+public class Solution {
+public List<TreeNode> generateTrees(int n) {
+		
+		List<List<TreeNode>> record = new ArrayList<List<TreeNode>>();
+		
+		for(int i =0; i < n+1; i++) {
+			record.add(new ArrayList<TreeNode>());
+		}
+
+		record.get(0).add(null);
+		
+		if(n != 0) {
+			record.get(1).add(new TreeNode(1));
+		}		
+		if(n == 0) {
+			return record.get(0);
+		}
+		if(n == 1) {
+			return record.get(1);
+		}
+		
+		for(int i =2; i<=n; i++) {
+			for(int k = 1; k <= i; k++) {
+				int leftNum = record.get(k-1).size();
+				int rightNum = record.get(i-k).size();
+
+				for(int m = 0; m < leftNum ; m++) {					
+					for(int p = 0; p < rightNum; p++) {
+						TreeNode root = new TreeNode(k);
+						root.left = record.get(k-1).get(m);
+						root.right = updateTree(record, i-k, p, k);
+						record.get(i).add(root);
+					}				
+					
+				}
+			}
+		}
+		
+		
+		return record.get(n);
+	}
+	
+	public TreeNode updateTree(List<List<TreeNode>> re, int n, int pos,int dif) {
+		
+		TreeNode r = re.get(n).get(pos);
+		return traverse(r, dif);
+		
+		
+	}
+	
+	public static TreeNode traverse(TreeNode root, int dif) {
+		if(root == null) {
+			return null;
+		}
+		TreeNode r = new TreeNode(root.val);
+		r.val += dif;
+		r.left = traverse(root.left, dif);
+		r.right = traverse(root.right, dif);
+		
+		return r;
+	}
+}
