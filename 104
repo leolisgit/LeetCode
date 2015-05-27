@@ -1,0 +1,102 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+	public int max = 0;
+	
+    public int maxDepth(TreeNode root) {
+    	
+    // 	calculateDepth(root, 0);
+    	
+    	return calculateDepth2(root);
+    	
+        
+    }
+    
+    public int calculateDepth(TreeNode root, int depth) {
+    	
+    	if(root == null) {
+    		return depth;
+    	}
+    	depth++;
+    	int leftDepth = calculateDepth(root.left, depth);
+    	int rightDepth = calculateDepth(root.right,depth);
+    	max = Math.max(max,Math.max(leftDepth,rightDepth));
+    	return depth--;
+    }
+    //lever oder traversal to calculate max depth, single queue,it times out
+    public int calculateDepth(TreeNode root) {
+    	Queue<TreeNode> que = new LinkedList<TreeNode>();
+    	que.offer(root);
+    	
+    	TreeNode n = null;
+    	int flag = -1;
+    	boolean lev = false;
+    	int max = 0;
+    	while(que.isEmpty() == false) {
+    		flag++;  	
+    		lev = false;
+    		for(int i = 0; i < Math.pow(2, flag); i++) {
+        		n = que.poll();
+        		if(n != null) {
+        			lev = true;
+            		que.offer(n.left);
+            		que.offer(n.right);
+        		}
+        		if(n == null) {
+        			que.offer(null);
+        			que.offer(null);
+        		}
+    		}
+    		if(lev == true) {
+    			max++;
+    		}else {
+    			break;
+    		}
+    	}
+    	return max;
+    }
+    //level order traversal to calculate max depth, two queues
+    public int calculateDepth2(TreeNode root) {
+    	Queue<TreeNode> que1 = new LinkedList<TreeNode>();
+    	Queue<TreeNode> que2 = new LinkedList<TreeNode>();
+    	
+    	que1.offer(root);
+    	
+    	TreeNode n = null;
+    	int max = 0;
+    	boolean flag = false;
+    	while(que1.isEmpty() == false || que2.isEmpty() == false) {
+    		flag = false;
+    		if(max % 2 != 0) {
+    			while(que2.isEmpty() == false) {
+            		n = que2.poll();
+            		if(n != null) {
+            			flag = true;
+            			que1.offer(n.left);
+            			que1.offer(n.right);
+            		}
+    			}
+    		}else {
+    			while(que1.isEmpty() == false) {
+            		n = que1.poll();
+            		if(n != null) {
+            			flag = true;
+            			que2.offer(n.left);
+            			que2.offer(n.right);
+            		}
+    			}
+    		}
+    		if(flag == true) {
+    			max++;
+    		}
+    	}
+    	return max;
+    }
+}
