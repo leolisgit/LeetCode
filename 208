@@ -1,0 +1,77 @@
+class TrieNode {
+    // Initialize your data structure here.
+	boolean isWord;
+	HashMap<Character, TrieNode> nexts;
+    public TrieNode() {
+        nexts = new HashMap<Character, TrieNode>();
+        isWord = false;
+    }
+}
+
+public class Trie {
+    
+    private TrieNode root;
+
+    public Trie() {
+        root = new TrieNode();
+    }
+
+    // Inserts a word into the trie.
+    public void insert(String word) {
+        char[] s = word.toCharArray();
+        TrieNode n = root;      
+        int i = 0;
+        for( ; i < s.length; i++) {
+        	TrieNode next = n.nexts.get(s[i]);
+        	if(next != null) {
+        		n = next;
+        	}else {
+        		break;
+        	}
+        }
+        
+        for( ; i < s.length; i++) {
+        	TrieNode insertNode =new TrieNode();
+        	n.nexts.put(s[i], insertNode);
+        	n = insertNode;
+        }
+        n.isWord = true;
+    }
+
+    // Returns if the word is in the trie.
+    public boolean search(String word) {
+    	char[] s = word.toCharArray();
+    	TrieNode n = root;
+        for(int i = 0; i < s.length; i++) {
+        	
+        	if(n.nexts.get(s[i]) == null){
+        		return false;
+        	}else{
+        		n = n.nexts.get(s[i]);
+        	}
+        }
+        return n.isWord;
+    }
+
+    // Returns if there is any word in the trie
+    // that starts with the given prefix.
+    public boolean startsWith(String prefix) {
+    	
+    	char[] s = prefix.toCharArray();
+    	TrieNode n = root;
+        for(int i = 0; i < s.length; i++) {
+        	
+        	if(n.nexts.get(s[i]) == null){
+        		return false;
+        	}else{
+        		n = n.nexts.get(s[i]);
+        	}
+        }
+        return true;
+    }
+}
+
+// Your Trie object will be instantiated and called as such:
+// Trie trie = new Trie();
+// trie.insert("somestring");
+// trie.search("key");
