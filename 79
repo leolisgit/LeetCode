@@ -1,0 +1,104 @@
+public class Solution {
+    
+    public boolean exist(char[][] board, String word) {
+    	
+    	boolean result = false;
+    	
+    	for(int i = 0; i < board.length; i++) {
+    		for(int j = 0; j < board[i].length; j++) {
+    			if(word.charAt(0) == board[i][j]) {
+    				result = checkExist(board, i, j, word, 0);
+    				if(result == true){
+    					return true;
+    				}
+    			}
+    		}
+    	}
+    	return result;
+    }
+    public boolean checkExist(char[][]board, int x, int y, String word, int index) {
+    	
+    	
+    	if(index == word.length()) {
+    		return true;
+    	}
+    	
+    	if(x>=0 && x<board.length && y>=0 && y<board[x].length &&
+    			word.charAt(index) == board[x][y]) {
+    		char temp = board[x][y];
+    		//avoid go back
+    		board[x][y] = '@';
+    		index++;
+    		//return the result ASAP
+    		if(checkExist(board, x-1, y, word, index)) {
+    			return true;
+    		}
+
+    		if(checkExist(board, x+1, y, word, index)){
+    			return true;
+    		}
+    		if(checkExist(board, x, y-1, word, index)){
+    			return true;
+    		}
+    		if(checkExist(board, x, y+1, word, index)){
+    			return true;
+    		}
+    		//If not exist, restore the board
+    		board[x][y] = temp;
+    	}
+
+    	return false;
+    }
+    // Times out, because recurse all kinds of condition cost much time
+    // public boolean exist(char[][] board, String word) {
+    	
+    // 	char[] letters = word.toCharArray();
+    // 	int index = letters.length;
+    // 	boolean result = false;
+    	
+    // 	for(int i = 0; i < board.length; i++) {
+    // 		for(int j = 0; j < board[i].length; j++) {
+    // 			if(letters[0] == board[i][j]) {
+    // 				result = checkExist(letters, 0, board, i, j, 'N');
+    // 			}
+    // 		}
+    // 	}
+    // 	return result;
+    // }
+    // public boolean checkExist(char[] letters, int i, 
+    // 		char[][]board, int x, int y, char direction) {
+    	
+    // 	boolean up = false,down = false,right = false,left = false;
+    	
+    // 	if(i > letters.length-1) {
+    // 		return true;
+    // 	}
+    	
+    // 	if(letters[i] == board[x][y]) {
+    //     	if( indexValid(x-1,y,board) && direction != 'D') {
+    //     		up = checkExist(letters,i+1,board,x-1,y, 'U');
+    //     	}
+    //     	if( indexValid(x+1,y,board) && direction != 'U') {
+    //     		down = checkExist(letters,i+1,board,x+1,y, 'D');
+    //     	}
+    //     	if( indexValid(x,y-1,board) && direction != 'R') {
+    //     		right = checkExist(letters,i+1,board,x,y-1, 'L');
+    //     	}
+    //     	if( indexValid(x,y+1,board) && direction != 'L') {
+    //     		left = checkExist(letters,i+1,board,x,y+1, 'R');
+    //     	}
+    //     	if(up||down||right||left == true) {
+    //     		return true;
+    //     	}
+    // 	}
+
+    // 	return false;
+    // }
+    // public boolean indexValid(int x, int y, char[][] board) {
+    // 	if(x >= 0 && x < board.length && y >= 0 && y < board[0].length) {
+    // 		return true;
+    // 	}else{
+    // 		return false;
+    // 	}
+    // }
+}
