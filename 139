@@ -1,0 +1,49 @@
+public class Solution {
+    
+// 	public boolean wordBreak(String s, Set<String> wordDict) {
+
+// 		int n = s.length();
+// 		//dp[i] 表示前i个字符组成的字串能否进行拆分
+// 		boolean[] dp = new boolean[n + 1];
+// 		dp[0] = true;
+		
+// 		for (int i = 1; i <= n; i++) {
+// 			//j表示从0-i中间存在一个j，该0-j个字符可以组成单词，然后判断j+1到i能否组成单词
+// 			//如果可以，dp[i] 为true，不能，继续寻找是否存在j
+// 			//Note:dp[j]指的是前j个，这里j不是下标，如果j=4，dp[4]表示前四个字符可以组成单词
+// 			//此时substring的j是下标，已经指向第5个字符了，而不是j+1，具体怎么写是根据substring怎么定义
+// 			for (int j = 0; j < i; j++) {
+// 				if (dp[j] == true && wordDict.contains(s.substring(j, i))) {
+// 					dp[i] = true;
+// 					break;
+// 				}
+// 			}
+// 		}
+// 		return dp[n];
+// 	}
+	//利用链表只记录能分割单词的字符的index,避免了dp[]中每个i的判断
+	public boolean wordBreak(String s, Set<String> dict) {
+
+		List<Integer> list = new ArrayList<Integer>();
+		for (int i = s.length() - 1; i >= 0; i--) {
+			String sub = s.substring(i);
+			if (dict.contains(sub)) {
+				list.add(i);
+			} else {
+				for (Integer index : list) {
+					sub = s.substring(i, index);
+					if (dict.contains(sub)) {
+						list.add(i);
+						break;
+					}
+				}
+			}
+		}
+		if (list.isEmpty()) {
+			return false;
+		} else {
+			Integer index = list.get(list.size() - 1);
+			return index == 0;
+		}
+	}
+}
