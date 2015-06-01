@@ -1,0 +1,48 @@
+public class Solution {
+    public List<String> wordBreak(String s, Set<String> dict) {
+    	
+        int length = s.length(); 
+        
+        if (this.isWordBreak(s, dict) == false){  
+            return new ArrayList<String>();  
+        }  
+        boolean[] dp = new boolean[length+1];    
+        dp[0] = true; 
+        //dpList is used to record the words of dp[i]
+        ArrayList<String>[] dpList = new ArrayList[length+1];  
+        for (int i=1; i <= length; i++){  
+            dpList[i] = new ArrayList<String>();  
+        }  
+        
+        for (int i = 1; i <= length; i++) {    
+            for (int j = 0; j < i; j++) {    
+                if (dp[j] && dict.contains(s.substring(j, i))) {    
+                    dp[i] = true;  
+                    //a new word, add it to dpList
+                    if (j == 0){  
+                        dpList[i].add(s.substring(j, i));  
+                    }else{
+                        for (int k=0; k<dpList[j].size(); k++){  
+                            dpList[i].add(dpList[j].get(k) + " " + s.substring(j, i));  
+                        }  
+                    }  
+                }  
+            }    
+        }    
+        return dpList[length]; 
+    }
+    public boolean isWordBreak(String s, Set<String> dict) {  
+        int length = s.length();    
+        boolean[] dp = new boolean[length+1];    
+        dp[0] = true;    
+        for (int i = 1; i <= length; i++) {    
+            for (int j = 0; j < i; j++) {    
+                if (dp[j] && dict.contains(s.substring(j, i))) {    
+                    dp[i] = true;    
+                    break;    
+                }    
+            }    
+        }    
+        return dp[length];   
+    }
+}
