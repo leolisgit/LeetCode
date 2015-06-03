@@ -1,0 +1,35 @@
+public class Solution {
+    
+/*这道题目可以使用递归DFS来做，但是空间复杂度肯定大于O(n)
+还可以使用matrix最为dp数组，记录每个节点的最小路径值，空间复杂度O(n^2)
+可以简化为一维数组是因为这个三角的第n行有第n个节点，并且每次只需要知道上一层的每个节点的最小路径
+不需要知道上上一层，所以不需要一个二维数组
+采用自底向上是因为，到了最顶层只有一个值，如果自顶向下，到了最后，会有n个值，还需要从n个值中找到最小值
+*/
+    public int minimumTotal(List<List<Integer>> triangle) {
+        
+        if(triangle == null) {
+    		return 0;
+    	}
+    	if(triangle.size() == 0) {
+    		return 0;
+    	}
+    	
+    	int size = triangle.size();
+    	//这个三角形的第n行刚好有n个元素，dp[]初始化为第n行的元素
+    	int[] dp =  new int[size];
+        
+        List<Integer> temp = triangle.get(size-1);
+    	for(int i=0; i<size; i++) {
+    		dp[i] = temp.get(i);
+    	}
+    	
+    	for(int i=size-2; i>=0; i--) {
+    		for(int j=0; j<triangle.get(i).size(); j++) {
+    			dp[j] = triangle.get(i).get(j) + Math.min(dp[j], dp[j+1]);
+    		}
+    	}
+    	
+    	return dp[0];
+    }
+}
