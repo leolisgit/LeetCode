@@ -1,0 +1,68 @@
+public class Solution {
+    public int uniquePathsWithObstacles(int[][] obstacleGrid) {
+        
+    	int row = obstacleGrid.length;
+    	int cul = obstacleGrid[0].length;
+    	//初始化grid，障碍处设置为-1，为节省空间，将grid复用
+    	for(int i = 0; i < row; i++) {
+    		for(int j = 0; j < cul; j++) {
+    			if(obstacleGrid[i][j] == 1) {
+    				obstacleGrid[i][j] = -1;
+    			}
+    		}
+    	}
+    	//初始化grid，-1表示不可达，n表示到达该点有n条路径，初始化的为gird的最上一行和最左一行
+    	for(int i = 0; i < row; i++) {
+
+    		if(obstacleGrid[i][0] == 0) {
+    			obstacleGrid[i][0] = 1;
+    			continue;
+    		}
+    		if(obstacleGrid[i][0] == -1) {
+    			for(int j = i+1; j < row; j++) {
+    				obstacleGrid[j][0] = -1;
+    			}
+    			break;
+    		}
+    	}
+    	for(int i = 0; i < cul; i++) {
+
+    		if(obstacleGrid[0][i] == 0) {
+    			obstacleGrid[0][i] = 1;
+    			continue;
+    		}
+    		if(obstacleGrid[0][i] == -1) {
+    			for(int j = i+1; j < cul; j++) {
+    				obstacleGrid[0][j] = -1;
+    			}
+    			break;
+    		}
+    	}
+    	//
+    	for(int i = 1; i < row; i++) {
+    		for(int j = 1; j < cul; j++) {
+    		    //该点不可达
+    			if(obstacleGrid[i][j] == -1) {
+    				continue;
+    			}
+    			//计算对角线（不严格）的可达路径数，遇到上或者左有不可达点的分四种情况
+    			if(obstacleGrid[i-1][j] != -1 && obstacleGrid[i][j-1] != -1){
+    				obstacleGrid[i][j] =  obstacleGrid[i-1][j] + obstacleGrid[i][j-1];
+    			}
+    			if(obstacleGrid[i-1][j] == -1 && obstacleGrid[i][j-1] == -1){
+    				obstacleGrid[i][j] = -1;
+    			}
+    			if(obstacleGrid[i-1][j] == -1){
+    				obstacleGrid[i][j] = obstacleGrid[i][j-1];
+    			}
+    			if(obstacleGrid[i][j-1] == -1){
+    				obstacleGrid[i][j] = obstacleGrid[i-1][j];
+    			}
+    		}
+    	}
+    	if(obstacleGrid[row-1][cul-1] == -1) {
+    		return 0;
+    	}
+    	return obstacleGrid[row-1][cul-1];
+    }
+}
