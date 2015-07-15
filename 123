@@ -1,0 +1,46 @@
+public class Solution {
+    public int maxProfit(int[] prices) {
+        
+    	if(prices == null || prices.length == 0) {
+    		return 0;
+    	}
+    	int n = prices.length;
+    	
+    	int[] left = new int [n];
+    	int[] right = new int [n];
+    	
+    	int minPrice = prices[0];
+    	int max = 0;
+    	
+    	//from 1 to i
+    	for(int i = 1; i < prices.length; i++) {
+    		if(prices[i] < minPrice) {
+    			minPrice = prices[i];
+    			left[i] = left[i-1];
+    		}else{
+    			left[i] = Math.max(left[i-1], prices[i]-minPrice);
+    		}
+    	}
+    	
+    	int maxPrice = prices[n-1];
+    	max = 0;
+    	//from i to n
+    	for(int i = prices.length-2; i > 0; i--) {
+    		if(prices[i] >= maxPrice) {
+    			maxPrice = prices[i];
+    			right[i] = right[i+1];
+    		}else {
+    			right[i] = Math.max(max, maxPrice-prices[i]);
+    		}
+    	}
+    	
+    	int ans = 0; 
+    	for(int i = 0; i < n; i++){
+    		if(left[i] + right[i] > ans) {
+    			ans = left[i] + right[i];
+    		}
+    	}
+    	
+    	return ans;
+    }
+}
