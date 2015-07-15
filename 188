@@ -1,0 +1,47 @@
+public class Solution {
+	public int maxProfit(int k, int[] prices) {
+
+		if (prices == null || prices.length == 0) {
+			return 0;
+		}
+		int n = prices.length;
+		
+		if (n <= k) {
+			return maxProfit(prices);
+		}
+
+		int[][] local = new int[k + 1][n];
+		int[][] global = new int[k + 1][n];
+
+		for (int i = 1; i <= k; i++) {
+			for (int j = 1; j < n; j++) {
+				int dif = prices[j] - prices[j - 1];
+                local[i][j] = Math.max(global[i - 1][j - 1] + Math.max(0, dif), local[i][j - 1] + dif);
+				global[i][j] = Math.max(global[i][j - 1], local[i][j]);
+			}
+		}
+		return global[k][n - 1];
+	}
+
+	public int maxProfit(int[] prices) {
+
+		// equals to find the sum of all increasing segments
+		if (prices == null || prices.length == 0) {
+			return 0;
+		}
+		int n = prices.length;
+		int minPrice = prices[0];
+		int maxProfit = 0;
+		for (int i = 1; i < n; i++) {
+			if (prices[i] < prices[i - 1]) {
+				maxProfit += prices[i - 1] - minPrice;
+				minPrice = prices[i];
+			}
+			if (i == n - 1) {
+				maxProfit += prices[i] - minPrice;
+			}
+		}
+		return maxProfit;
+
+	}
+}
