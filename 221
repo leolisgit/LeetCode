@@ -1,0 +1,104 @@
+public class Solution {
+//     public int maximalSquare(char[][] matrix) {
+//     	if(matrix == null || matrix.length == 0) {
+//     		return 0;
+//     	}
+    	
+//     	int row = matrix.length, col = matrix[0].length;
+//     	int[][] height = new int[row][col];
+//     	int maxArea = 0;
+//     	for(int i = 0; i < row; i++) {
+//     		for(int j = 0; j < col; j++) {
+//     			if(matrix[i][j] == '0') {
+//     				height[i][j] = 0;		
+//     			}else {
+//     				height[i][j] = i == 0 ? 1 : height[i-1][j] + 1;
+//     			}
+//     		}
+//     	}
+//     	for(int i = 0; i < row; i++) {
+//     		int max = maxAreaInHis(height[i]);
+//     		if(max > maxArea) {
+//     			maxArea = max;
+//     		}
+//     	}
+    	
+//     	return maxArea;
+
+        
+//     }
+//     public int maxAreaInHis(int[] height) {
+        
+//     	Stack<Integer> stack = new Stack<Integer>();
+    	
+//     	int max = 0;
+//     	int i = 0;
+    	
+//     	while(i < height.length) {
+//     		if(stack.isEmpty() || height[i] >= height[stack.peek()]){
+//     			stack.push(i++);
+//     		}else{
+//         		int t = stack.pop();
+//         		int width = 0;
+//         		if(stack.isEmpty()) {
+//         			width = i;
+//         		}else {
+//         			width = i - stack.peek() -1;
+//         		}
+    			
+//     			if(height[t] > width) {
+//     				max = Math.max(max, width*width);
+//     			}else {
+//     				max = Math.max(max, height[t]*height[t]);
+//     			}
+//     		}
+//     	}
+    	
+//     	while(stack.isEmpty() == false) {
+//     		int t = stack.pop();
+//     		int width = 0;
+//     		if(stack.isEmpty()) {
+//     			width = i;
+//     		}else {
+//     			width = i - stack.peek() -1;
+//     		}
+			
+// 			if(height[t] > width) {
+// 				max = Math.max(max, width*width);
+// 			}else {
+// 				max = Math.max(max, height[t]*height[t]);
+// 			}
+//     	}
+//     	return max;
+//     }
+    // if matrix[i][j] == '1' dp[i][j] = min(dp[i-1][j],dp[i][j-1],dp[i-1][j-1]) + 1
+    public int maximalSquare(char[][] matrix) {
+    	if(matrix == null || matrix.length == 0) {
+    		return 0;
+    	}
+    	
+    	int row = matrix.length, col = matrix[0].length;
+    	int[][] dp = new int[row][col];
+    	
+    	int max = 0;
+    	
+    	for(int i = 0; i < row; i++) {
+    		for(int j = 0; j < col; j++) {
+    			if(i == 0 || j == 0) {
+    				if(matrix[i][j] == '1') {
+    					dp[i][j] = 1;
+    				}
+    			}else {
+    				if(matrix[i][j] == '1') {
+    					dp[i][j] = Math.min (Math.min(dp[i-1][j], dp[i][j-1]), dp[i-1][j-1]) + 1;
+    				}else {
+    					dp[i][j] = 0;
+    				}
+    			}
+    			max = Math.max(dp[i][j], max);
+    		}
+    	}
+    	
+    	return max*max;
+    }
+}
